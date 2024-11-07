@@ -1,0 +1,50 @@
+import pandas as pd
+
+df = pd.DataFrame({
+    "Іваненко_1": ["123-432-424"],
+    "Зулко": ["094-435-231"],
+    "Іваненко_2": ["765-567-675"],
+    "Макаренко": ["126-432-765"],
+    "Хмер": ["325-786-654"],
+    "Вінстон": ["653-234-658"],
+    "Тупел": ["645-231-895"],
+    "Дунф": ["985-645-124"],
+    "Шевченко": ["687-984-120"],
+    "Франко": ["012-235-451"]
+})
+
+def aggregate_data(df):
+    agg_data = df.nunique()
+    print("Агрегація: кількість унікальних значень у кожному стовпці:")
+    print(agg_data)
+
+def group_data(df):
+    df_melted = pd.melt(df, value_vars=df.columns, var_name = 'Імена', value_name='Значення')
+    df_melted['Категорія']=df_melted['Значення'].apply(lambda x: x[0])
+    grouped = df_melted.groupby('Категорія').size()
+    print("Групування за категорією(перша цифра): ")
+    print(grouped)
+
+def main():
+    while True:
+        print("\nВиберіть дію:")
+        print("1. Агрегація")
+        print("2. Групування")
+        print("3. Вивід на екран датафрейму")
+        print("4. Вихід")
+
+        choice = input("Введіть номер дії (1/2/3/4): ")
+
+        if choice == '1':
+            aggregate_data(df)
+        elif choice == '2':
+            group_data(df)
+        elif choice == '3':
+            print(df)
+        elif choice == '4':
+            print("Завершення програми.")
+            break
+        else:
+            print("Неправильний вибір. Спробуйте ще раз.")
+
+main()
