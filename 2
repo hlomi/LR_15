@@ -1,0 +1,26 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+plt.style.use('ggplot')
+plt.rcParams['figure.figsize'] = (15, 5)
+
+fixed_df = pd.read_csv('path_to_data.csv', 
+                       sep=',', 
+                       encoding='latin1', 
+                       parse_dates=['Date'], 
+                       dayfirst=True, 
+                       index_col='Date')
+
+print(fixed_df.head(3))
+
+fixed_df['Місяць'] = fixed_df.index.month
+
+popular_month = fixed_df.groupby('Місяць').size().idxmax()
+
+print(f"Найбільш популярний місяць серед велосипедистів: {popular_month}")
+
+fixed_df.groupby('Місяць').size().plot(kind='bar', color='blue', alpha=0.7)
+plt.title("Використання велодоріжок за місяцями у 2010 році")
+plt.xlabel("Місяць")
+plt.ylabel("Кількість використань")
+plt.show()
