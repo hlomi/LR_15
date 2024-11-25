@@ -1,26 +1,32 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# Налаштування стилю графіків
 plt.style.use('ggplot')
 plt.rcParams['figure.figsize'] = (15, 5)
 
+# Завантаження даних
 fixed_df = pd.read_csv('path_to_data.csv', 
-                       sep=',', 
-                       encoding='latin1', 
+                       sep=',', encoding='latin1', 
                        parse_dates=['Date'], 
                        dayfirst=True, 
                        index_col='Date')
 
-print(fixed_df.head(3))
-
+# Додавання колонки з місяцем
 fixed_df['Місяць'] = fixed_df.index.month
 
-popular_month = fixed_df.groupby('Місяць').size().idxmax()
+# Групування за місяцями для всіх велодоріжок
+monthly_data = fixed_df.groupby('Місяць').sum()
 
-print(f"Найбільш популярний місяць серед велосипедистів: {popular_month}")
+# Виведення об'єднаного датафрейму
+print("Об'єднаний датафрейм із даними за місяцями:")
+print(monthly_data)
 
-fixed_df.groupby('Місяць').size().plot(kind='bar', color='blue', alpha=0.7)
-plt.title("Використання велодоріжок за місяцями у 2010 році")
+# Побудова графіка використання всіх велодоріжок за місяцями
+monthly_data.plot(kind='bar', alpha=0.8)
+plt.title("Використання велодоріжок за місяцями")
 plt.xlabel("Місяць")
-plt.ylabel("Кількість використань")
+plt.ylabel("Сумарне використання")
+plt.xticks(ticks=range(12), labels=[pd.to_datetime(f'2023-{i+1}-01').strftime('%B') for i in range(12)], rotation=45)
+plt.tight_layout()
 plt.show()
